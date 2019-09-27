@@ -83,11 +83,16 @@ def update_bullets(ai_settings, screen, ship, stats, sb, aliens, bullets):
 
 def check_bullet_alien_collision(ai_settings, screen, ship, stats, sb, aliens, bullets):
     """Responds to bullet-alien collisions"""
+    pygame.mixer.init()
+    pickUpSound = pygame.mixer.Sound('Sounds/explosion_sound.wav')
+    pickUpSound.set_volume(0.8)
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
     if collisions:
         for aliens in collisions.values():
             stats.score += ai_settings.alien_points * len(aliens)
             sb.prep_score()
+            pickUpSound.play()
+
         check_high_score(stats, sb)
     if len(aliens) == 0:
         # If entire fleet is destroyed, start new level
